@@ -2,6 +2,7 @@ package com.vincenzomerola.auth.configs;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -27,7 +28,7 @@ public class SecurityConfiguration {
         this.authenticationProvider = authenticationProvider;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
-
+/*
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf()
@@ -46,7 +47,29 @@ public class SecurityConfiguration {
 
         return http.build();
     }
-
+*/
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf()
+                .disable()
+                .authorizeHttpRequests()
+                .requestMatchers(HttpMethod.GET, "/users") //apro endpoint 
+                .permitAll() // Consenti l'accesso pubblico all'endpoint /users per i metodi GET
+                .requestMatchers("/auth/**")
+                .permitAll()
+                .requestMatchers(HttpMethod.POST, "/admin/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/admin/**").hasRole("ADMIN")
+                .anyRequest()
+                .authenticated()
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+    }
+    
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

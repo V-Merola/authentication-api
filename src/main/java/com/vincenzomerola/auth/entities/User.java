@@ -7,6 +7,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.vincenzomerola.auth.enumRole.Role;
+
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -36,7 +38,20 @@ public class User implements UserDetails {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    @Override
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
+    
+    
+    public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	@Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
     }
