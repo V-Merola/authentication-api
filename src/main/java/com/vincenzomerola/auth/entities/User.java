@@ -5,11 +5,13 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.vincenzomerola.auth.enumRole.Role;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -52,9 +54,10 @@ public class User implements UserDetails {
 	}
 
 	@Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
-    }
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+	    return Collections.singletonList(new SimpleGrantedAuthority("ROLE_"+ role.name()));
+	}
+
 
     public String getPassword() {
         return password;
