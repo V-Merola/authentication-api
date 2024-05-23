@@ -44,6 +44,33 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
     
+    ////////////////////////////
+    
+    @Column(name = "reset_password_token")
+    private String resetPasswordToken;
+
+    @Column(name = "reset_password_token_expiry_date")
+    private Long resetPasswordTokenExpiryDate;
+
+    // getters and setters for the new fields
+
+    public String getResetPasswordToken() {
+        return resetPasswordToken;
+    }
+
+    public void setResetPasswordToken(String resetPasswordToken) {
+        this.resetPasswordToken = resetPasswordToken;
+    }
+
+    public Long getResetPasswordTokenExpiryDate() {
+        return resetPasswordTokenExpiryDate;
+    }
+
+    public void setResetPasswordTokenExpiryDate(Long resetPasswordTokenExpiryDate) {
+        this.resetPasswordTokenExpiryDate = resetPasswordTokenExpiryDate;
+    }
+
+    ////////////////////////////
     
     public Role getRole() {
 		return role;
