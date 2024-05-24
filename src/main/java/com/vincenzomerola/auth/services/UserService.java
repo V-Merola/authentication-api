@@ -68,6 +68,9 @@ public class UserService {
             mailSender.send(mailMessage);
             
             */
+            
+            // Stampa il token in console
+            System.out.println("Password reset token: " + token);
             return token;
         }
         return null;
