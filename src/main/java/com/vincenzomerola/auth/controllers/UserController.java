@@ -20,7 +20,7 @@ import com.vincenzomerola.auth.services.UserService;
 
 import java.util.List;
 
-@RequestMapping("/users")
+@RequestMapping("/auth/users")
 @RestController
 public class UserController {
     private final UserService userService;

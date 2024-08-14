@@ -2,6 +2,7 @@ package com.vincenzomerola.auth.controllers;
 
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +15,7 @@ import com.vincenzomerola.auth.responses.LoginResponse;
 import com.vincenzomerola.auth.services.AuthenticationService;
 import com.vincenzomerola.auth.services.JwtService;
 
-@RequestMapping("/auth")
+@RequestMapping("/auth/public")
 @RestController
 public class AuthenticationController {
     private final JwtService jwtService;
@@ -42,4 +43,14 @@ public class AuthenticationController {
 
         return ResponseEntity.ok(loginResponse);
     }
+    
+    
+    @GetMapping("/test")
+    public ResponseEntity<String> testEndpoint() {
+        return ResponseEntity.ok("This is a test response (AUTH API) ");
+    }
+
+    
+    
+    
 }
