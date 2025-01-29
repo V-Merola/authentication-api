@@ -53,6 +53,11 @@ public class UserService {
     //Implementare una protezione, ad esempio email di conferma
     //Il metodo verifica soltanto se l'email è presente nel sistema.
     public String sendPasswordResetToken(String email) {
+        // Verifica che l'email dell'utente che sta facendo la richiesta sia quella dell'utente autenticato
+        if (!authentication.getName().equals(email)) {
+        return null; //!!! Modificare: lanciare eccezione di accesso non autorizzato!!!
+        }
+    
         Optional<User> userOptional = userRepository.findByEmail(email);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
