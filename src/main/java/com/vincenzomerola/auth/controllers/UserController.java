@@ -19,7 +19,7 @@ import com.vincenzomerola.auth.entities.User;
 import com.vincenzomerola.auth.services.UserService;
 
 import java.util.List;
-
+//NOTA: 
 @RequestMapping("/auth/users")
 @RestController
 public class UserController {
@@ -39,17 +39,24 @@ public class UserController {
     }
 
     @GetMapping("admin/all")
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<User>> allUsers() {
         List <User> users = userService.allUsers();
 
         return ResponseEntity.ok(users);
     }
-    
+    // Fare un controllo sul DTO riguardo la validià della password
     @PutMapping("/me/change-password")
+    @PreAuthorize("#user.username == authentication.name")
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDto changePasswordDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = (User) authentication.getPrincipal();
+
+         // Controllo che l'utente stia cambiando solo la propria password
+        if (!currentUser.getUsername().equals(changePasswordDto.getUsername())) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Cannot change password for another user");
+        }
+
 
         boolean success = userService.changePassword(currentUser, changePasswordDto);
 
@@ -63,7 +70,7 @@ public class UserController {
     public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordDto forgotPasswordDto) {
         String token = userService.sendPasswordResetToken(forgotPasswordDto.getEmail());
         if (token != null) {
-            return ResponseEntity.ok().body("Password reset token: " + token);
+            return ResponseEntity.ok().body("Password reset token: " + token); //evitare stampa dati sensibili. Solo per test
         } else {
             return ResponseEntity.badRequest().body("Email not found");
         }
