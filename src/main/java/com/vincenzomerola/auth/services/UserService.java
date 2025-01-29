@@ -49,6 +49,9 @@ public class UserService {
             return false;
         }
     }
+
+    //Implementare una protezione, ad esempio email di conferma
+    //Il metodo verifica soltanto se l'email è presente nel sistema.
     public String sendPasswordResetToken(String email) {
         Optional<User> userOptional = userRepository.findByEmail(email);
         if (userOptional.isPresent()) {
@@ -75,7 +78,8 @@ public class UserService {
         }
         return null;
     }
-
+    //Implementare una protezione, ad esempio email di conferma o altri metodi di validazione
+    //implementare un meccanismo che verifichi che il token di reset sia stato richiesto dal legittimo proprietario dell'account. 
     public boolean resetPassword(String token, String newPassword) {
         Optional<User> userOptional = userRepository.findByResetPasswordToken(token);
         if (userOptional.isPresent()) {
