@@ -84,6 +84,11 @@ public class UserService {
         Optional<User> userOptional = userRepository.findByResetPasswordToken(token);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
+
+              // Controlla che l'utente autenticato sia lo stesso di quello che sta cercando di resettare la password
+            if (!user.equals(authenticatedUser)) {
+                throw new AccessDeniedException("You are not allowed to reset another user's password");
+            }
             if (user.getResetPasswordTokenExpiryDate() > System.currentTimeMillis()) {
                 user.setPassword(passwordEncoder.encode(newPassword));
                 user.setResetPasswordToken(null);
