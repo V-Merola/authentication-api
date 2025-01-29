@@ -30,11 +30,18 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<User> authenticatedUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        User currentUser = (User) authentication.getPrincipal();
-
+    public ResponseEntity<User> authenticatedUser(Principal principal) {
+        //Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        //verifica che il Principal sia effettivamente un'istanza di Authentication, non strett necessario, controllare bene
+        /*
+        if (principal instanceof Authentication) {
+        User currentUser = (User) ((Authentication) principal).getPrincipal();
+        return ResponseEntity.ok(currentUser);
+        } else {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        */
+        User currentUser = (User) ((Authentication) principal).getPrincipal();
         return ResponseEntity.ok(currentUser);
     }
 
